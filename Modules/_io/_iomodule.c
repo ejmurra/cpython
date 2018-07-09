@@ -107,6 +107,7 @@ _io.open
     newline: str(accept={str, NoneType}) = NULL
     closefd: bool(accept={int}) = True
     opener: object = None
+    ensure_dirs: bool(accept={int}) = False
 
 Open file and return a stream.  Raise OSError upon failure.
 
@@ -213,6 +214,11 @@ calling *opener* with (*file*, *flags*). *opener* must return an open
 file descriptor (passing os.open as *opener* results in functionality
 similar to passing None).
 
+ensure_dirs is a boolean indicating whether open should create
+intermediate directories between the current working directory and the
+file to be opened. ensure_dirs defaults to False and has no effect
+on a file opened in "r" mode.
+
 open() returns a file object whose type depends on the mode, and
 through which the standard file operations such as reading and writing
 are performed. When open() is used to open a file in a text mode ('w',
@@ -231,8 +237,9 @@ opened in a binary mode.
 static PyObject *
 _io_open_impl(PyObject *module, PyObject *file, const char *mode,
               int buffering, const char *encoding, const char *errors,
-              const char *newline, int closefd, PyObject *opener)
-/*[clinic end generated code: output=aefafc4ce2b46dc0 input=03da2940c8a65871]*/
+              const char *newline, int closefd, PyObject *opener,
+              int ensure_dirs)
+/*[clinic end generated code: output=4b51cbd3d760bcec input=fe25b1cfc79886f1]*/
 {
     unsigned i;
 

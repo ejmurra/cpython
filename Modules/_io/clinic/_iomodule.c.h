@@ -4,7 +4,8 @@ preserve
 
 PyDoc_STRVAR(_io_open__doc__,
 "open($module, /, file, mode=\'r\', buffering=-1, encoding=None,\n"
-"     errors=None, newline=None, closefd=True, opener=None)\n"
+"     errors=None, newline=None, closefd=True, opener=None,\n"
+"     ensure_dirs=False)\n"
 "--\n"
 "\n"
 "Open file and return a stream.  Raise OSError upon failure.\n"
@@ -112,6 +113,11 @@ PyDoc_STRVAR(_io_open__doc__,
 "file descriptor (passing os.open as *opener* results in functionality\n"
 "similar to passing None).\n"
 "\n"
+"ensure_dirs is a boolean indicating whether open should create\n"
+"intermediate directories between the current working directory and the\n"
+"file to be opened. ensure_dirs defaults to False and has no effect\n"
+"on a file opened in \"r\" mode.\n"
+"\n"
 "open() returns a file object whose type depends on the mode, and\n"
 "through which the standard file operations such as reading and writing\n"
 "are performed. When open() is used to open a file in a text mode (\'w\',\n"
@@ -132,14 +138,15 @@ PyDoc_STRVAR(_io_open__doc__,
 static PyObject *
 _io_open_impl(PyObject *module, PyObject *file, const char *mode,
               int buffering, const char *encoding, const char *errors,
-              const char *newline, int closefd, PyObject *opener);
+              const char *newline, int closefd, PyObject *opener,
+              int ensure_dirs);
 
 static PyObject *
 _io_open(PyObject *module, PyObject *const *args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    static const char * const _keywords[] = {"file", "mode", "buffering", "encoding", "errors", "newline", "closefd", "opener", NULL};
-    static _PyArg_Parser _parser = {"O|sizzziO:open", _keywords, 0};
+    static const char * const _keywords[] = {"file", "mode", "buffering", "encoding", "errors", "newline", "closefd", "opener", "ensure_dirs", NULL};
+    static _PyArg_Parser _parser = {"O|sizzziOi:open", _keywords, 0};
     PyObject *file;
     const char *mode = "r";
     int buffering = -1;
@@ -148,14 +155,15 @@ _io_open(PyObject *module, PyObject *const *args, Py_ssize_t nargs, PyObject *kw
     const char *newline = NULL;
     int closefd = 1;
     PyObject *opener = Py_None;
+    int ensure_dirs = 0;
 
     if (!_PyArg_ParseStackAndKeywords(args, nargs, kwnames, &_parser,
-        &file, &mode, &buffering, &encoding, &errors, &newline, &closefd, &opener)) {
+        &file, &mode, &buffering, &encoding, &errors, &newline, &closefd, &opener, &ensure_dirs)) {
         goto exit;
     }
-    return_value = _io_open_impl(module, file, mode, buffering, encoding, errors, newline, closefd, opener);
+    return_value = _io_open_impl(module, file, mode, buffering, encoding, errors, newline, closefd, opener, ensure_dirs);
 
 exit:
     return return_value;
 }
-/*[clinic end generated code: output=a9de1ae79c960e81 input=a9049054013a1b77]*/
+/*[clinic end generated code: output=62b2924f0cd8f159 input=a9049054013a1b77]*/
